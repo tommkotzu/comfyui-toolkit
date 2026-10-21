@@ -41,3 +41,9 @@ resources/         links, notes, troubleshooting
 ```
 
 To add a new pack, create `nodes/<name>/__init__.py` that exports `NODE_CLASS_MAPPINGS` (and optionally `NODE_DISPLAY_NAME_MAPPINGS`).
+
+
+External Links and recources
+
+seamless transitions
+https://huggingface.co/systms/SYSTMS-FLW-IC-LORA-LTX-2.3
