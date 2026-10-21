@@ -1,0 +1,535 @@
+{
+  "id": "6f1c2a1e-hud-boxes-0000-000000000002",
+  "revision": 0,
+  "last_node_id": 9,
+  "last_link_id": 11,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadVideo",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        340,
+        480
+      ],
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "widgets_values": [
+        "your_video.mp4",
+        "image"
+      ],
+      "mode": 0,
+      "flags": {},
+      "order": 0,
+      "properties": {
+        "Node name for S&R": "LoadVideo"
+      }
+    },
+    {
+      "id": 2,
+      "type": "GetVideoComponents",
+      "pos": [
+        380,
+        0
+      ],
+      "size": [
+        260,
+        130
+      ],
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            3,
+            5
+          ]
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            10
+          ]
+        },
+        {
+          "name": "fps",
+          "type": "FLOAT",
+          "links": [
+            4,
+            9
+          ]
+        },
+        {
+          "name": "bit_depth",
+          "type": "COMBO",
+          "links": []
+        },
+        {
+          "name": "color_space",
+          "type": "COMBO",
+          "links": []
+        }
+      ],
+      "widgets_values": [],
+      "mode": 0,
+      "flags": {},
+      "order": 1,
+      "properties": {
+        "Node name for S&R": "GetVideoComponents"
+      }
+    },
+    {
+      "id": 3,
+      "type": "Moondream31Loader",
+      "pos": [
+        380,
+        200
+      ],
+      "size": [
+        300,
+        180
+      ],
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "MOONDREAM31_MODEL",
+          "links": [
+            2
+          ]
+        },
+        {
+          "name": "runtime_info",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "widgets_values": [
+        false,
+        "Auto",
+        4,
+        "Balanced (8K pages)",
+        "moondream3.1-9B-A2B"
+      ],
+      "mode": 0,
+      "flags": {},
+      "order": 2,
+      "properties": {
+        "Node name for S&R": "Moondream31Loader"
+      }
+    },
+    {
+      "id": 4,
+      "type": "HUDMultiDetect",
+      "pos": [
+        720,
+        0
+      ],
+      "size": [
+        320,
+        300
+      ],
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MOONDREAM31_MODEL",
+          "link": 2
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 3
+        },
+        {
+          "name": "fps",
+          "type": "FLOAT",
+          "widget": {
+            "name": "fps"
+          },
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "detections",
+          "type": "VLM_DETECTIONS",
+          "links": [
+            6
+          ]
+        },
+        {
+          "name": "objects_found",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "widgets_values": [
+        "person, car",
+        30,
+        2,
+        4,
+        100,
+        false
+      ],
+      "mode": 0,
+      "flags": {},
+      "order": 3,
+      "properties": {
+        "Node name for S&R": "HUDMultiDetect"
+      }
+    },
+    {
+      "id": 5,
+      "type": "HUDRenderBoxes",
+      "pos": [
+        1060,
+        0
+      ],
+      "size": [
+        320,
+        420
+      ],
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 5
+        },
+        {
+          "name": "detections",
+          "type": "VLM_DETECTIONS",
+          "link": 6
+        }
+      ],
+      "outputs": [
+        {
+          "name": "overlay",
+          "type": "IMAGE",
+          "links": [
+            7
+          ]
+        }
+      ],
+      "widgets_values": [
+        "neon",
+        "#00FFC8, #FF2D95, #FFE600",
+        "word",
+        "corners",
+        3,
+        0.25,
+        0.0,
+        true,
+        false,
+        true,
+        16,
+        true
+      ],
+      "mode": 0,
+      "flags": {},
+      "order": 4,
+      "properties": {
+        "Node name for S&R": "HUDRenderBoxes"
+      }
+    },
+    {
+      "id": 6,
+      "type": "TimeSliceEffect",
+      "pos": [
+        1060,
+        380
+      ],
+      "size": [
+        300,
+        420
+      ],
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 7
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "shape": 7,
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            8
+          ]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": []
+        },
+        {
+          "name": "num_frames",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "slice_edges",
+          "type": "MASK",
+          "links": []
+        }
+      ],
+      "widgets_values": [
+        20,
+        1,
+        0.0,
+        "linear",
+        "forward",
+        "loop",
+        0,
+        0,
+        "fixed",
+        "linear",
+        0,
+        false,
+        60,
+        6,
+        0.0,
+        "linear",
+        0
+      ],
+      "flags": {},
+      "order": 5,
+      "properties": {
+        "Node name for S&R": "TimeSliceEffect"
+      }
+    },
+    {
+      "id": 7,
+      "type": "CreateVideo",
+      "pos": [
+        1400,
+        0
+      ],
+      "size": [
+        260,
+        130
+      ],
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 8
+        },
+        {
+          "name": "fps",
+          "type": "FLOAT",
+          "widget": {
+            "name": "fps"
+          },
+          "link": 9
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "shape": 7,
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            11
+          ]
+        }
+      ],
+      "widgets_values": [
+        30
+      ],
+      "mode": 0,
+      "flags": {},
+      "order": 6,
+      "properties": {
+        "Node name for S&R": "CreateVideo"
+      }
+    },
+    {
+      "id": 8,
+      "type": "SaveVideo",
+      "pos": [
+        1700,
+        0
+      ],
+      "size": [
+        420,
+        480
+      ],
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 11
+        }
+      ],
+      "outputs": [],
+      "widgets_values": [
+        "video/hud_multi",
+        "auto",
+        "auto"
+      ],
+      "mode": 0,
+      "flags": {},
+      "order": 7,
+      "properties": {
+        "Node name for S&R": "SaveVideo"
+      }
+    },
+    {
+      "id": 9,
+      "type": "Note",
+      "pos": [
+        0,
+        520
+      ],
+      "size": [
+        680,
+        300
+      ],
+      "inputs": [],
+      "outputs": [],
+      "widgets_values": [
+        "HUD BOXES (multi) \u2013 how to use\n\n1. HUD Multi Detect \u2192 'objects': words to box, separated by commas or new lines (e.g. person, car, dog). Each word is one extra pass over the video, so 3 words \u2248 3x the time.\n2. HUD Render Boxes:\n   palette: neon / military / cyberpunk / thermal / mono white / mono red / pastel, or 'custom' + your own hex list in custom_palette (#FF0000, #00FF00, ...). Colours go to words in order.\n   color_by: word (one colour per word) or each box.\n   style: corners (HUD brackets), box, or both.\n   fill_opacity > 0 adds a tint inside boxes. show_score adds confidence %.\n   hold_between_frames keeps boxes steady on frames skipped by frame_stride.\n3. TimeSlice is bypassed (purple): Ctrl+B to enable.\n4. Output: ComfyUI-Shared/output/video/hud_multi_*.mp4"
+      ],
+      "mode": 0,
+      "flags": {},
+      "order": 8,
+      "properties": {
+        "Node name for S&R": "Note"
+      }
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "VIDEO"
+    ],
+    [
+      2,
+      3,
+      0,
+      4,
+      0,
+      "MOONDREAM31_MODEL"
+    ],
+    [
+      3,
+      2,
+      0,
+      4,
+      1,
+      "IMAGE"
+    ],
+    [
+      4,
+      2,
+      2,
+      4,
+      2,
+      "FLOAT"
+    ],
+    [
+      5,
+      2,
+      0,
+      5,
+      0,
+      "IMAGE"
+    ],
+    [
+      6,
+      4,
+      0,
+      5,
+      1,
+      "VLM_DETECTIONS"
+    ],
+    [
+      7,
+      5,
+      0,
+      6,
+      0,
+      "IMAGE"
+    ],
+    [
+      8,
+      6,
+      0,
+      7,
+      0,
+      "IMAGE"
+    ],
+    [
+      9,
+      2,
+      2,
+      7,
+      1,
+      "FLOAT"
+    ],
+    [
+      10,
+      2,
+      1,
+      7,
+      2,
+      "AUDIO"
+    ],
+    [
+      11,
+      7,
+      0,
+      8,
+      0,
+      "VIDEO"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.75,
+      "offset": [
+        40,
+        40
+      ]
+    }
+  },
+  "version": 0.4
+}
